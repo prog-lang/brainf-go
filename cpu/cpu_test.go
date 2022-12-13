@@ -2,8 +2,9 @@ package cpu
 
 import (
 	"bytes"
-	"os"
 	"testing"
+
+	"github.com/google/go-cmp/cmp"
 )
 
 func TestCellOverflow(t *testing.T) {
@@ -25,7 +26,7 @@ func TestCellOverflow(t *testing.T) {
 func TestStdIn(t *testing.T) {
 	code := []Op{IN}
 	const letter = 'a'
-	vm := New(code, bytes.NewReader([]byte{letter}), os.Stdout)
+	vm := New(code, bytes.NewReader([]byte{letter}), nil)
 	if err := vm.Start(); err != nil {
 		t.Fatalf("panic during execution: %v", err)
 	}
@@ -37,18 +38,29 @@ func TestStdIn(t *testing.T) {
 func TestStdOut(t *testing.T) {
 	code := []Op{INC, INC, INC, INC, INC, OUT}
 	buf := bytes.NewBuffer([]byte{})
-	vm := New(code, os.Stdin, buf)
+	vm := New(code, nil, buf)
 	if err := vm.Start(); err != nil {
 		t.Fatalf("panic during execution: %v", err)
 	}
-	if buf.Len() != 1 {
-		t.Fatalf("invalid buffer length: wanted %d; got %d", 1, buf.Len())
+	expect := []byte{5}
+	bytes := buf.Bytes()
+	if !cmp.Equal(expect, bytes) {
+		t.Fatalf("invalid bytes written to buffer:\n%s",
+			cmp.Diff(expect, bytes))
 	}
-	b, err := buf.ReadByte()
-	if err != nil {
-		t.Fatalf("failed to read from buf: %s", err)
+}
+
+func TestConditionalJumps(t *testing.T) {
+	code := []Op{INC, INC, INC, FWD(6), OUT, DEC, BACK(3)}
+	buf := bytes.NewBuffer([]byte{})
+	vm := New(code, nil, buf)
+	if err := vm.Start(); err != nil {
+		t.Fatalf("panic during execution: %v", err)
 	}
-	if b != 5 {
-		t.Fatalf("invalid byte written to buffer: wanted %d; got %d", 5, b)
+	expect := []byte{3, 2, 1}
+	bytes := buf.Bytes()
+	if !cmp.Equal(expect, bytes) {
+		t.Fatalf("invalid bytes written to buffer:\n%s",
+			cmp.Diff(expect, bytes))
 	}
 }
