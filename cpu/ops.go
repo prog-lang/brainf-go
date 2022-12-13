@@ -30,6 +30,9 @@ func OUT(c *CPU) {
 	if err := c.out.WriteByte(c.tape[c.tp]); err != nil {
 		panic(err)
 	}
+	if err := c.out.Flush(); err != nil {
+		panic(err)
+	}
 }
 
 func FWD(ip uint) Op {
