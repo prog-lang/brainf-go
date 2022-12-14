@@ -18,12 +18,12 @@ func main() {
 func app() *cli.App {
 	return &cli.App{
 		Name:           "brainf-go",
-		Usage:          "run brainf*ck programs",
+		Usage:          "Elegant Brainf*uck Interpreter",
 		DefaultCommand: "help",
 		Commands: []*cli.Command{{
 			Name:      "run",
 			Aliases:   []string{"r"},
-			Usage:     "run program from source code file",
+			Usage:     "Runs program from source code file",
 			ArgsUsage: "[source file name]",
 			Action:    run,
 		}},
