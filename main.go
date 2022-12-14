@@ -17,14 +17,21 @@ func main() {
 
 func app() *cli.App {
 	return &cli.App{
-		Name:   "brainf-go",
-		Usage:  "run brainf*ck programs",
-		Action: run,
+		Name:           "brainf-go",
+		Usage:          "run brainf*ck programs",
+		DefaultCommand: "help",
+		Commands: []*cli.Command{{
+			Name:      "run",
+			Aliases:   []string{"r"},
+			Usage:     "run program from source code file",
+			ArgsUsage: "[source file name]",
+			Action:    run,
+		}},
 	}
 }
 
 func run(c *cli.Context) (err error) {
-	name := c.Args().Get(0)
+	name := c.Args().First()
 	code, err := parse.FromFile(name)
 	if err != nil {
 		return

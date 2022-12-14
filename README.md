@@ -23,9 +23,10 @@ NAME:
    brainf-go - run brainf*ck programs
 
 USAGE:
-   brainf-go [global options] [source file name]
+   brainf-go [global options] command [command options] [source file name]
 
 COMMANDS:
+   run, r   run program from source code file
    help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
@@ -36,5 +37,5 @@ GLOBAL OPTIONS:
 
 ```bash
 brainf-go help
-brainf-go ./examples/hello-world.bf
+brainf-go run ./examples/hello-world.bf
 ```
