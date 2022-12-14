@@ -26,3 +26,17 @@ func TestParser(t *testing.T) {
 		t.Fatalf("invalid bytes written to buffer:\n%s", cmp.Diff(expect, got))
 	}
 }
+
+func TestUnmatchedOpenBracket(t *testing.T) {
+	source := "["
+	if _, err := FromReader(strings.NewReader(source)); err == nil {
+		t.Fatalf("expected parsing error, but got %v", err)
+	}
+}
+
+func TestUnmatchedClosingBracket(t *testing.T) {
+	source := "]"
+	if _, err := FromReader(strings.NewReader(source)); err == nil {
+		t.Fatalf("expected parsing error, but got %v", err)
+	}
+}
