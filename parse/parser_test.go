@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	. "github.com/prog-lang/brainf-go/cpu"
+	"github.com/prog-lang/brainf-go/cpu"
 )
 
 func TestParser(t *testing.T) {
@@ -16,8 +16,7 @@ func TestParser(t *testing.T) {
 		t.Fatalf("unexpected parsing error: %s", err)
 	}
 	buf := bytes.NewBuffer([]byte{})
-	vm := New(code, nil, buf)
-	vm.Start()
+	vm := cpu.New(code, nil, buf)
 	if err := vm.Start().Error(); err != nil {
 		t.Fatalf("panic during execution: %v", err)
 	}
