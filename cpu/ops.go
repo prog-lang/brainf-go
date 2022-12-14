@@ -10,6 +10,7 @@ func DEC(c *CPU) {
 	c.tape[c.tp]--
 }
 
+// TODO: grow tape on pointer overflow.
 func NEXT(c *CPU) {
 	c.tp++
 }
