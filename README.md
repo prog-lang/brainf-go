@@ -20,13 +20,13 @@ go install github.com/prog-lang/brainf-go@latest
 
 ```text
 NAME:
-   brainf-go - run brainf*ck programs
+   brainf-go - Elegant Brainf*uck Interpreter
 
 USAGE:
-   brainf-go [global options] command [command options] [source file name]
+   brainf-go [global options] command [command options] [arguments...]
 
 COMMANDS:
-   run, r   run program from source code file
+   run, r   Runs program from source code file
    help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
