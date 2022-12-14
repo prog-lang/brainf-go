@@ -17,8 +17,9 @@ func TestParser(t *testing.T) {
 	}
 	buf := bytes.NewBuffer([]byte{})
 	vm := New(code, nil, buf)
-	if err := vm.Start(); err != nil {
-		t.Fatalf("unexpected execution error: %s", err)
+	vm.Start()
+	if err := vm.Error(); err != nil {
+		t.Fatalf("panic during execution: %v", err)
 	}
 	expect := []byte{3, 2, 1, 3, 2, 1, 3, 2, 1}
 	got := buf.Bytes()

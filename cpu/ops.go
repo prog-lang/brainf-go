@@ -2,21 +2,32 @@ package cpu
 
 func NOP(c *CPU) {}
 
-func INC(c *CPU) {
-	c.tape[c.tp]++
-}
-
 func DEC(c *CPU) {
 	c.tape[c.tp]--
 }
 
-// TODO: grow tape on pointer overflow.
-func NEXT(c *CPU) {
-	c.tp++
+func INC(c *CPU) {
+	c.tape[c.tp]++
 }
 
 func PREV(c *CPU) {
-	c.tp--
+	if c.tp > 0 {
+		c.tp--
+		return
+	}
+	newTape := make([]byte, len(c.tape), (len(c.tape)+1)*2)
+	c.tp = uint(len(c.tape) - 1)
+	c.tape = append(newTape, c.tape...)
+}
+
+func NEXT(c *CPU) {
+	c.tp++
+	if c.tp < uint(len(c.tape)) {
+		return
+	}
+	newTape := make([]byte, (len(c.tape)+1)*2)
+	copy(newTape, c.tape)
+	c.tape = newTape
 }
 
 func IN(c *CPU) {

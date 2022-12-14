@@ -20,10 +20,10 @@ func newParser() *parser {
 
 func (p *parser) feed(b byte) error {
 	switch b {
-	case '+':
-		p.ops = append(p.ops, cpu.INC)
 	case '-':
 		p.ops = append(p.ops, cpu.DEC)
+	case '+':
+		p.ops = append(p.ops, cpu.INC)
 	case '<':
 		p.ops = append(p.ops, cpu.PREV)
 	case '>':
@@ -34,7 +34,7 @@ func (p *parser) feed(b byte) error {
 		p.ops = append(p.ops, cpu.OUT)
 	case '[':
 		p.brackets.push(p.ip)
-		p.ops = append(p.ops, nil)
+		p.ops = append(p.ops, cpu.NOP)
 	case ']':
 		if p.brackets.size() == 0 {
 			return fmt.Errorf("`]` at %d does not have a matching `[`", p.ip)

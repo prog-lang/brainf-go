@@ -25,6 +25,15 @@ func Default(code []Op) *CPU {
 }
 
 func New(code []Op, in io.Reader, out io.Writer) *CPU {
+	return NewWithTapeLength(code, in, out, initialTapeLength)
+}
+
+func NewWithTapeLength(
+	code []Op,
+	in io.Reader,
+	out io.Writer,
+	initialTapeLength uint,
+) *CPU {
 	return &CPU{
 		code: code,
 		tape: make([]byte, initialTapeLength),
@@ -37,11 +46,14 @@ func New(code []Op, in io.Reader, out io.Writer) *CPU {
 	}
 }
 
-func (c *CPU) Start() any {
+func (c *CPU) Start() {
 	defer c.recover()
 	for c.ok {
 		c.fetch().execute()
 	}
+}
+
+func (c *CPU) Error() any {
 	return c.err
 }
 

@@ -13,7 +13,8 @@ func TestCellOverflow(t *testing.T) {
 		code = append(code, INC)
 	}
 	vm := Default(code)
-	if err := vm.Start(); err != nil {
+	vm.Start()
+	if err := vm.Error(); err != nil {
 		t.Fatalf("panic during execution: %v", err)
 	}
 	const expect = 44
@@ -27,11 +28,12 @@ func TestStdIn(t *testing.T) {
 	code := []Op{IN}
 	const letter = 'a'
 	vm := New(code, bytes.NewReader([]byte{letter}), nil)
-	if err := vm.Start(); err != nil {
+	vm.Start()
+	if err := vm.Error(); err != nil {
 		t.Fatalf("panic during execution: %v", err)
 	}
 	if cell := vm.tape[vm.tp]; cell != letter {
-		t.Fatalf("failed to read from stdin: wanted %v; got %v", letter, cell)
+		t.Fatalf("failed to read from stdin: wanted %d; got %d", letter, cell)
 	}
 }
 
@@ -39,7 +41,8 @@ func TestStdOut(t *testing.T) {
 	code := []Op{INC, INC, INC, INC, INC, OUT}
 	buf := bytes.NewBuffer([]byte{})
 	vm := New(code, nil, buf)
-	if err := vm.Start(); err != nil {
+	vm.Start()
+	if err := vm.Error(); err != nil {
 		t.Fatalf("panic during execution: %v", err)
 	}
 	expect := []byte{5}
@@ -54,7 +57,8 @@ func TestConditionalJumps(t *testing.T) {
 	code := []Op{INC, INC, INC, FWD(6), OUT, DEC, BACK(3)}
 	buf := bytes.NewBuffer([]byte{})
 	vm := New(code, nil, buf)
-	if err := vm.Start(); err != nil {
+	vm.Start()
+	if err := vm.Error(); err != nil {
 		t.Fatalf("panic during execution: %v", err)
 	}
 	expect := []byte{3, 2, 1}
@@ -62,5 +66,26 @@ func TestConditionalJumps(t *testing.T) {
 	if !cmp.Equal(expect, bytes) {
 		t.Fatalf("invalid bytes written to buffer:\n%s",
 			cmp.Diff(expect, bytes))
+	}
+}
+
+func TestTapeOverflow(t *testing.T) {
+	code := []Op{NEXT, NEXT, INC}
+	vm := NewWithTapeLength(code, nil, nil, 3)
+	vm.Start()
+	if err := vm.Error(); err != nil {
+		t.Fatalf("panic during execution: %v", err)
+	}
+}
+
+func TestTapeUnderflow(t *testing.T) {
+	code := []Op{PREV, INC, INC, PREV, INC}
+	vm := NewWithTapeLength(code, nil, nil, 3)
+	vm.Start()
+	if err := vm.Error(); err != nil {
+		t.Fatalf("panic during execution: %v", err)
+	}
+	if vm.tape[vm.tp] != 1 {
+		t.Fatalf("invalid index move: wanted %d; got %d", 1, vm.tape[vm.tp])
 	}
 }
