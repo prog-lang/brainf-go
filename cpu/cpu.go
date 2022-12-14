@@ -46,11 +46,13 @@ func NewWithTapeLength(
 	}
 }
 
-func (c *CPU) Start() {
+func (c *CPU) Start() (out *CPU) {
 	defer c.recover()
+	out = c
 	for c.ok {
 		c.fetch().execute()
 	}
+	return
 }
 
 func (c *CPU) Error() any {
