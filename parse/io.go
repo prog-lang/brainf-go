@@ -8,10 +8,10 @@ import (
 	"github.com/sharpvik/fungi"
 )
 
-func FromFile(name string) (ops []cpu.Op, err error) {
+func FromFile(name string) ([]cpu.Op, error) {
 	file, err := os.Open(name)
 	if err != nil {
-		return
+		return nil, err
 	}
 	defer file.Close()
 	return FromReader(file)

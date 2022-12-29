@@ -13,6 +13,6 @@ func newBufferedStream(r io.Reader) *stream {
 	return &stream{bufio.NewReader(r)}
 }
 
-func (s *stream) Next() (b byte, err error) {
+func (s *stream) Next() (byte, error) {
 	return s.buf.ReadByte()
 }
