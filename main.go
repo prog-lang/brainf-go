@@ -18,7 +18,7 @@ func main() {
 func app() *cli.App {
 	return &cli.App{
 		Name:           "brainf-go",
-		Usage:          "Elegant Brainf*uck Interpreter",
+		Usage:          "Elegant Brainf*ck Interpreter",
 		DefaultCommand: "help",
 		Commands: []*cli.Command{{
 			Name:      "run",

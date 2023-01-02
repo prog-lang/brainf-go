@@ -1,6 +1,6 @@
-# Brainf*ck Interpreter in Go
+# Brainf\*ck Interpreter in Go
 
-Simple to read, well-tested, and elegant Brainf*ck interpreter written in Go.
+Simple to read, well-tested, and elegant Brainf\*ck interpreter written in Go.
 
 ## Index
 
@@ -20,7 +20,7 @@ go install github.com/prog-lang/brainf-go@latest
 
 ```text
 NAME:
-   brainf-go - Elegant Brainf*uck Interpreter
+   brainf-go - Elegant Brainf*ck Interpreter
 
 USAGE:
    brainf-go [global options] command [command options] [arguments...]
