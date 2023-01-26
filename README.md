@@ -26,7 +26,8 @@ USAGE:
    brainf-go [global options] command [command options] [arguments...]
 
 COMMANDS:
-   run, r   Runs program from source code file
+   run      Runs program from source code file
+   repl     Enters the Read, Evaluate, Print, Loop mode
    help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
@@ -37,5 +38,9 @@ GLOBAL OPTIONS:
 
 ```bash
 brainf-go help
+brainf-go repl
 brainf-go run ./examples/hello-world.bf
 ```
+
+**NOTE:** REPL stops reading at EOF. Once you're done inputting the source code,
+you can begin code execution with `ENTER > CTRL + D`.

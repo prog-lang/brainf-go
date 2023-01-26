@@ -9,37 +9,44 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-func main() {
-	if err := app().Run(os.Args); err != nil {
-		fmt.Println(err)
-	}
+const flagREPL = "repl"
+
+var app = &cli.App{
+	Name:           "brainf-go",
+	Usage:          "Elegant Brainf*ck Interpreter",
+	DefaultCommand: "help",
+	Commands: []*cli.Command{{
+		Name:      "run",
+		Usage:     "Runs program from source code file",
+		ArgsUsage: "path/to/source.bf",
+		Action:    run,
+	}, {
+		Name:      "repl",
+		Usage:     "Enters the Read, Evaluate, Print, Loop mode",
+		ArgsUsage: " ", //! No arguments.
+		Action:    repl,
+	}},
 }
 
-func app() *cli.App {
-	return &cli.App{
-		Name:           "brainf-go",
-		Usage:          "Elegant Brainf*ck Interpreter",
-		DefaultCommand: "help",
-		Commands: []*cli.Command{{
-			Name:      "run",
-			Aliases:   []string{"r"},
-			Usage:     "Runs program from source code file",
-			ArgsUsage: "[source file name]",
-			Action:    run,
-		}},
-	}
-}
-
-func run(c *cli.Context) (err error) {
+func run(c *cli.Context) error {
 	name := c.Args().First()
 	code, err := parse.FromFile(name)
 	if err != nil {
-		return
+		return fmt.Errorf("failed to parse source code: %s", err)
 	}
-	vm := cpu.Default(code)
-	vm.Start()
-	if e := vm.Error(); e != nil {
-		err = fmt.Errorf("panic during execution: %v", e)
+	if err := cpu.Default(code).Start().Error(); err != nil {
+		return fmt.Errorf("panic during execution: %v", err)
 	}
 	return nil
+}
+
+func repl(_ *cli.Context) error {
+	NewREPL().Start()
+	return nil
+}
+
+func main() {
+	if err := app.Run(os.Args); err != nil {
+		fmt.Println(err)
+	}
 }
