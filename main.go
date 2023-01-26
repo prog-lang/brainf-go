@@ -23,7 +23,6 @@ var app = &cli.App{
 	}, {
 		Name:      "repl",
 		Usage:     "Enters the Read, Evaluate, Print, Loop mode",
-		ArgsUsage: " ", //! No arguments.
 		Action:    repl,
 	}},
 }
